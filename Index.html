@@ -1,0 +1,405 @@
+<!doctype html>
+<html lang="uk">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Опрос — Реабілітація (сучасний дизайн 2025)</title>
+  <style>
+    :root{
+      --bg:#0f1724;
+      --card:#0b1220;
+      --glass: rgba(255,255,255,0.04);
+      --accent-a: linear-gradient(90deg,#44e0b7 0%, #4db6ff 100%);
+      --accent-b: linear-gradient(90deg,#ff9bd6 0%, #7a66ff 100%);
+      --muted: #a6b0c3;
+      --glass-2: rgba(255,255,255,0.02);
+      --success: #44e0b7;
+      --danger: #ff7a7a;
+      --glass-border: rgba(255,255,255,0.06);
+      font-family: Inter, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%;margin:0;background: radial-gradient(1200px 600px at 10% 10%, rgba(77,182,255,0.06), transparent), radial-gradient(800px 400px at 90% 90%, rgba(122,102,255,0.04), transparent), var(--bg); color:#e6eef8}
+    .wrap{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:32px}
+
+    .card{
+      width:920px;max-width:96vw;background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+      border:1px solid var(--glass-border);border-radius:18px;padding:28px;backdrop-filter: blur(8px);box-shadow: 0 8px 30px rgba(2,6,23,0.6);
+      display:grid;grid-template-columns:320px 1fr;gap:24px;align-items:start;
+    }
+
+    /* LEFT - info column */
+    .col-info{padding:14px;border-radius:12px;background:linear-gradient(180deg, rgba(255,255,255,0.012), transparent);border:1px solid var(--glass-2)}
+    .brand{display:flex;gap:12px;align-items:center;margin-bottom:18px}
+    .logo{width:44px;height:44px;border-radius:10px;background:var(--accent-b);display:flex;align-items:center;justify-content:center;font-weight:700;color:#fff}
+    h1{font-size:18px;margin:0 0 8px}
+    p.lead{margin:0;color:var(--muted);font-size:13px}
+
+    .progress-wrap{margin-top:22px}
+    .progress{height:12px;background:linear-gradient(90deg, rgba(255,255,255,0.02), transparent);border-radius:999px;border:1px solid var(--glass-border);overflow:hidden}
+    .progress > i{display:block;height:100%;width:0%;background:var(--accent-a);box-shadow:0 6px 18px rgba(77,182,255,0.08);transition:width .35s ease}
+    .progress-meta{display:flex;justify-content:space-between;align-items:center;margin-top:10px;font-size:13px;color:var(--muted)}
+
+    .steps-list{margin-top:18px;display:flex;flex-direction:column;gap:8px}
+    .step-item{display:flex;gap:10px;align-items:center}
+    .step-dot{width:10px;height:10px;border-radius:50%;background:rgba(255,255,255,0.04)}
+    .step-dot.active{background:var(--accent-a)}
+    .small{font-size:12px;color:var(--muted)}
+
+    /* RIGHT - form area */
+    .form-area{padding:18px;border-radius:12px;background:linear-gradient(180deg, rgba(255,255,255,0.01), rgba(255,255,255,0.005));min-height:420px}
+    .qtitle{margin:0;font-size:20px;display:flex;align-items:center;gap:12px}
+    .qsub{margin:8px 0 18px;color:var(--muted);font-size:13px}
+
+    .control{margin:14px 0}
+    .range-wrap{display:flex;gap:18px;align-items:center}
+    input[type=range]{-webkit-appearance:none;width:100%;height:10px;border-radius:999px;background:linear-gradient(90deg,#253041, #1b2533);outline:none}
+    input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:22px;height:22px;border-radius:50%;background:var(--accent-b);box-shadow:0 6px 18px rgba(122,102,255,0.12);border:4px solid #081020}
+
+    .value-pill{min-width:56px;padding:8px 10px;border-radius:999px;background:rgba(255,255,255,0.02);border:1px solid var(--glass-border);text-align:center}
+
+    /* fancy checkboxes */
+    .checks{display:flex;flex-direction:column;gap:10px}
+    .chk{display:flex;align-items:center;gap:12px;padding:10px;border-radius:12px;border:1px solid rgba(255,255,255,0.02);background:linear-gradient(180deg, rgba(255,255,255,0.01), transparent);cursor:pointer;transition:transform .12s ease,box-shadow .12s ease}
+    .chk:hover{transform:translateY(-4px)}
+    .chk .circle{width:20px;height:20px;border-radius:50%;display:flex;align-items:center;justify-content:center;border:2px solid rgba(255,255,255,0.06)}
+    .chk.selected{box-shadow: 0 8px 26px rgba(68,224,183,0.06);border:1px solid rgba(68,224,183,0.08)}
+    .chk.selected .circle{background:var(--success);border-color:transparent}
+
+    /* image grid */
+    .img-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+    .img-card{padding:10px;border-radius:12px;background:linear-gradient(180deg, rgba(255,255,255,0.012), transparent);border:1px solid rgba(255,255,255,0.02);display:flex;gap:10px;align-items:center;cursor:pointer}
+    .img-card img{width:56px;height:56px;object-fit:cover;border-radius:8px}
+    .img-card .ic-title{font-size:14px}
+    .img-card.selected{outline:3px solid rgba(77,182,255,0.12);box-shadow:0 10px 30px rgba(13,31,55,0.6);transform:translateY(-6px)}
+
+    textarea, input[type=text]{width:100%;padding:12px;border-radius:10px;border:1px solid rgba(255,255,255,0.03);background:transparent;color:inherit;resize:vertical;font-size:14px}
+    .muted-note{font-size:12px;color:var(--muted);margin-top:8px}
+
+    .controls-bottom{display:flex;justify-content:space-between;align-items:center;margin-top:20px}
+    .btn{padding:10px 16px;border-radius:12px;border:0;background:linear-gradient(90deg,#111827, #0b1220);color:#e6eef8;font-weight:600;cursor:pointer;box-shadow:0 6px 18px rgba(2,6,23,0.6)}
+    .btn.ghost{background:transparent;border:1px solid rgba(255,255,255,0.04)}
+    .btn.primary{background:var(--accent-a);border:0;color:#071725}
+    .btn.primary:disabled{opacity:.5;cursor:not-allowed}
+
+    .footer-mini{font-size:12px;color:var(--muted);text-align:center;margin-top:12px}
+
+    @media (max-width:900px){
+      .card{grid-template-columns:1fr;}
+      .col-info{order:2}
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="card" role="application" aria-labelledby="surveyTitle">
+      <div class="col-info">
+        <div class="brand">
+          <div class="logo">R</div>
+          <div>
+            <h1 id="surveyTitle">Реабілітаційна анкета</h1>
+            <p class="lead">Коротке опитування — щоб підібрати індивідуальну програму</p>
+          </div>
+        </div>
+
+        <div class="progress-wrap">
+          <div class="progress" aria-hidden="true"><i id="progressBar"></i></div>
+          <div class="progress-meta"><span id="progressText">Крок 1 з 7</span><span id="progressPercent">0%</span></div>
+        </div>
+
+        <div class="steps-list" id="stepsList">
+          <!-- generated -->
+        </div>
+
+        <p class="muted-note">Відповідаючи — ви підтверджуєте, що інформація використовується для персоналізації програми. Ніяких універсальних рішень — тільки під вас.</p>
+      </div>
+
+      <div class="form-area" id="formArea">
+        <!-- Questions will render here -->
+      </div>
+
+    </div>
+  </div>
+
+  <script>
+    // --- Survey definition (translations as provided) ---
+    const steps = [
+      {
+        id: 'age',
+        title: 'Який у вас вік?',
+        subtitle: '📍 Вік важливий для вибору інтенсивності та підходу',
+        type: 'age'
+      },
+      {
+        id: 'diagnosis',
+        title: 'Чи є у вас діагностований стан або нещодавня травма?',
+        subtitle: 'Персоналізована реабілітаційна програма після травм, операцій чи болю в спині. Створюється після першого огляду та функціональної діагностики',
+        type: 'checkboxes',
+        options:[
+          'Так, був/-ла травма (розрив, вивих, перелом)',
+          'Так, хронічне захворювання (артроз, сколіоз, грижi)',
+          'Ні, але є біль/дискомфорт',
+          'Після операції'
+        ]
+      },
+      {
+        id: 'where',
+        title: 'Де саме ви відчуваєте дискомфорт?',
+        subtitle: 'Рухова терапія, мануальні техніки, тейпування — все в одному центрі',
+        type: 'images',
+        options:[
+          {img:'1.png',label:'Шия'},
+          {img:'2.png',label:'Спина (груд. або поперековий відд.)'},
+          {img:'3.png',label:'Коліно'},
+          {img:'4.png',label:'Плечі'},
+          {img:'5.png',label:'Голеностоп / стопи'},
+          {img:'6.png',label:'Все тіло'}
+        ]
+      },
+      {
+        id: 'pain',
+        title: 'Наскільки інтенсивним є біль/дискомфорт зараз?',
+        subtitle: 'Бігунок: від 0 (немає болю) до 10 (нестерпно)',
+        type: 'scale',
+        min:0,max:10
+      },
+      {
+        id: 'goal',
+        title: 'Яка ваша основна мета?',
+        subtitle: 'Наприклад: зменшити біль, відновити рухливість, почати займатись спортом, підготуватись до операції тощо',
+        type: 'textarea',
+        placeholder:'Впиши тут'
+      },
+      {
+        id: 'limits',
+        title: 'Чи є у вас медичні обмеження / діагнози, про які ми маємо знати?',
+        subtitle: 'Жодної “універсальної” програми — тільки те, що працює для вас',
+        type: 'textarea',
+        placeholder:'Вільне поле вводу'
+      },
+      {
+        id: 'format',
+        title: 'У якому форматі вам зручно проходити реабілітацію?',
+        subtitle: 'Гнучкий графік та формат занять — обираєте ви',
+        type: 'checkboxes',
+        options:[
+          'Офлайн у клініці',
+          'Онлайн з тренером',
+          'Гібридно (частина занять вдома, частина у спеціаліста)'
+        ]
+      }
+    ];
+
+    const total = steps.length;
+    let current = 0;
+    const answers = {};
+
+    const formArea = document.getElementById('formArea');
+    const progressBar = document.getElementById('progressBar');
+    const progressText = document.getElementById('progressText');
+    const progressPercent = document.getElementById('progressPercent');
+    const stepsList = document.getElementById('stepsList');
+
+    // render steps list
+    steps.forEach((s, i)=>{
+      const el = document.createElement('div');el.className='step-item';
+      el.innerHTML = `<div class='step-dot' id='dot-${s.id}'></div><div><div style='font-size:13px'>Крок ${i+1}</div><div class='small'>${s.title}</div></div>`;
+      stepsList.appendChild(el);
+    });
+
+    function render(){
+      const step = steps[current];
+      // update progress
+      const pct = Math.round((current/ (total)) * 100);
+      progressBar.style.width = pct + '%';
+      progressText.textContent = `Крок ${current+1} з ${total}`;
+      progressPercent.textContent = pct + '%';
+      // update dots
+      steps.forEach((s,i)=>{
+        const d = document.getElementById('dot-'+s.id);
+        if(!d) return;
+        d.classList.toggle('active', i<=current);
+      });
+
+      // render question
+      formArea.innerHTML = '';
+      const qwrap = document.createElement('div');
+      qwrap.innerHTML = `<h2 class='qtitle'>${step.title}</h2><div class='qsub'>${step.subtitle||''}</div>`;
+
+      // container for inputs
+      const cont = document.createElement('div');cont.className='qcontrols';
+
+      // produce controls based on type
+      if(step.type==='age'){
+        const wrapper = document.createElement('div');wrapper.className='control';
+        wrapper.innerHTML = `
+          <div class='range-wrap'>
+            <div style='flex:1'>
+              <input id='ageRange' type='range' min='12' max='99' value='35' step='1' aria-label='Вік'>
+              <div style='display:flex;justify-content:space-between;font-size:12px;color:var(--muted);margin-top:6px'><span>12</span><span>99</span></div>
+            </div>
+            <div class='value-pill' id='ageVal'>35</div>
+          </div>
+        `;
+        cont.appendChild(wrapper);
+      } else if(step.type==='checkboxes'){
+        const wrapper = document.createElement('div');wrapper.className='control checks';
+        step.options.forEach((opt, idx)=>{
+          const ch = document.createElement('label');ch.className='chk';ch.setAttribute('tabindex','0');ch.innerHTML = `<div class='circle'></div><div>${opt}</div>`;
+          ch.addEventListener('click',()=>{
+            // toggle selection
+            ch.classList.toggle('selected');
+            updateNextState();
+          });
+          ch.addEventListener('keydown',(e)=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();ch.click();}})
+          wrapper.appendChild(ch);
+        });
+        cont.appendChild(wrapper);
+      } else if(step.type==='images'){
+        const wrapper = document.createElement('div');wrapper.className='control img-grid';
+        step.options.forEach((opt)=>{
+          const card = document.createElement('div');card.className='img-card';
+          card.innerHTML = `<img src='${opt.img}' alt='${opt.label}' onerror="this.style.opacity=.35;this.nextElementSibling.style.opacity=.6"><div><div class='ic-title'>${opt.label}</div></div>`;
+          card.addEventListener('click',()=>{card.classList.toggle('selected'); updateNextState();});
+          card.setAttribute('tabindex','0');
+          card.addEventListener('keydown',(e)=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();card.click();}})
+          wrapper.appendChild(card);
+        });
+        cont.appendChild(wrapper);
+      } else if(step.type==='scale'){
+        const wrapper = document.createElement('div');wrapper.className='control';
+        wrapper.innerHTML = `
+          <div style='display:flex;gap:12px;align-items:center'>
+            <div style='flex:1'>
+              <input id='painRange' type='range' min='${step.min}' max='${step.max}' value='0' step='1'>
+              <div style='display:flex;justify-content:space-between;font-size:12px;color:var(--muted);margin-top:6px'><span>0</span><span>10</span></div>
+            </div>
+            <div class='value-pill' id='painVal'>0</div>
+          </div>
+        `;
+        cont.appendChild(wrapper);
+      } else if(step.type==='textarea'){
+        const wrapper = document.createElement('div');wrapper.className='control';
+        wrapper.innerHTML = `<textarea id='ta' rows='5' placeholder='${step.placeholder||''}'></textarea><div class='muted-note'>${step.placeholder?'':' '}</div>`;
+        cont.appendChild(wrapper);
+      }
+
+      // bottom navigation
+      const nav = document.createElement('div');nav.className='controls-bottom';
+      nav.innerHTML = `
+        <div>
+          <button class='btn ghost' id='backBtn' ${current===0?"disabled":''}>⬅ Повернутися</button>
+        </div>
+        <div style='display:flex;gap:10px;align-items:center'>
+          <button class='btn' id='saveBtn' style='display:none'>Зберегти</button>
+          <button class='btn primary' id='nextBtn' disabled>Продовжити ➜</button>
+        </div>
+      `;
+
+      formArea.appendChild(qwrap);formArea.appendChild(cont);formArea.appendChild(nav);
+
+      // add listeners after DOM placed
+      setTimeout(()=>{
+        // Age slider
+        const ageRange = document.getElementById('ageRange');
+        if(ageRange){
+          const val = document.getElementById('ageVal');
+          val.textContent = ageRange.value;
+          ageRange.addEventListener('input',()=>{val.textContent = ageRange.value; answers.age = ageRange.value; updateNextState();});
+          // initial
+          answers.age = ageRange.value;
+        }
+        // checkboxes
+        if(step.type==='checkboxes'){
+          // nothing to do here besides next state
+        }
+        // images
+        if(step.type==='images'){
+          // nothing extra
+        }
+        // scale
+        const painRange = document.getElementById('painRange');
+        if(painRange){
+          const pval = document.getElementById('painVal');
+          pval.textContent = painRange.value;
+          painRange.addEventListener('input',()=>{pval.textContent = painRange.value; answers.pain = painRange.value; updateNextState();});
+          answers.pain = painRange.value;
+        }
+        // textarea
+        const ta = document.getElementById('ta');
+        if(ta){
+          // for both goal and limits
+          ta.addEventListener('input',()=>{ answers[step.id]=ta.value.trim(); updateNextState();});
+          answers[step.id] = ta.value.trim();
+        }
+        // back and next
+        document.getElementById('backBtn').addEventListener('click',()=>{ if(current>0){current--; render();}})
+        document.getElementById('nextBtn').addEventListener('click',()=>{ if(!validateCurrent()) return; collectCurrent(); if(current<total-1){current++; render();} else { finish(); } });
+
+        updateNextState();
+      },50);
+    }
+
+    function collectCurrent(){
+      const step = steps[current];
+      if(step.type==='age'){
+        answers.age = document.getElementById('ageRange').value;
+      } else if(step.type==='checkboxes'){
+        const selected = Array.from(document.querySelectorAll('.chk.selected')).map(n=>n.innerText.trim());
+        answers[step.id] = selected;
+      } else if(step.type==='images'){
+        const selected = Array.from(document.querySelectorAll('.img-card.selected')).map(n=>n.querySelector('.ic-title').innerText.trim());
+        answers.where = selected;
+      } else if(step.type==='scale'){
+        answers.pain = document.getElementById('painRange').value;
+      } else if(step.type==='textarea'){
+        const ta = document.getElementById('ta'); answers[step.id]=ta?ta.value.trim():'';
+      }
+    }
+
+    function validateCurrent(){
+      const step = steps[current];
+      if(step.type==='checkboxes'){
+        const selected = document.querySelectorAll('.chk.selected').length;
+        if(selected===0){alert('Будь ласка, оберіть хоча б один варіант.');return false}
+      }
+      if(step.type==='images'){
+        const selected = document.querySelectorAll('.img-card.selected').length;
+        if(selected===0){alert('Будь ласка, вкажіть місце дискомфорту.');return false}
+      }
+      if(step.type==='textarea'){
+        const ta = document.getElementById('ta');
+        // allow empty for limits; but for goal require something
+        if(step.id==='goal' && (!ta || ta.value.trim().length<3)){alert('Будь ласка, опишіть вашу основну мету мінімум 3 символи.');return false}
+      }
+      return true;
+    }
+
+    function updateNextState(){
+      const step = steps[current];
+      const nextBtn = document.getElementById('nextBtn');
+      let ok = false;
+      if(step.type==='age') ok = true; // slider always has value
+      else if(step.type==='checkboxes') ok = document.querySelectorAll('.chk.selected').length>0;
+      else if(step.type==='images') ok = document.querySelectorAll('.img-card.selected').length>0;
+      else if(step.type==='scale') ok = true;
+      else if(step.type==='textarea'){
+        const ta = document.getElementById('ta');
+        if(step.id==='goal') ok = ta && ta.value.trim().length>2; else ok = true; // limits can be empty
+      }
+      if(nextBtn) nextBtn.disabled = !ok;
+    }
+
+    function finish(){
+      // collect last
+      collectCurrent();
+      // small success view
+      formArea.innerHTML = `<div style='text-align:center;padding:46px'><h2 style='margin:0 0 6px'>Дякуємо! ✅</h2><p class='qsub'>Ми отримали ваші відповіді. Наш спеціаліст зв'яжеться з вами для подальших кроків.</p><pre style='text-align:left;background:rgba(255,255,255,0.02);padding:12px;border-radius:8px;margin-top:18px;max-height:220px;overflow:auto'>${JSON.stringify(answers,null,2)}</pre><div style='margin-top:18px'><button class='btn primary' id='restart'>Заповнити ще раз</button></div></div>`;
+      document.getElementById('restart').addEventListener('click',()=>{ location.reload(); });
+    }
+
+    // initial render
+    render();
+  </script>
+</body>
+</html>
